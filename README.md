@@ -1,4 +1,4 @@
-# An accurate pentadiagonal matrix solution for the time-dependent Schr\"{o}dinger equation
+# An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
 
 <br/>
 
