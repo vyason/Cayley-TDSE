@@ -1,4 +1,4 @@
-# python code for solving the TDSE usingCayley's operator
+# python code for solving the TDSE using Cayley's operator
 # Copyright (C) 2022  Ankit Kumar
 # Email: akvyas1995@gmail.com
 #-----------------------------------------------------------------------
