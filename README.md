@@ -2,7 +2,7 @@
 
 <br/>
 
-* The method is properly explained in DOCUMENTATION.pdf.
+* Comments are provided in the main code only.
 
 <br/>
 
