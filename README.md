@@ -1,8 +1,3 @@
-# An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
-
-
-<br/>
-
 * This repository is a numerical implementation of 	arXiv:2205.13467 [quant-ph] in python.
 
 * Comments are provided in the main code only.
