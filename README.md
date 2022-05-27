@@ -4,11 +4,10 @@
 
 
 <br/>
-<br/>
+
 
 ### References:
 
-<br/>
 
 * An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
 
@@ -16,7 +15,6 @@
 
     https://doi.org/10.48550/arXiv.2205.13467
 
-<br/>
 
 * Nonclassical trajectories in head-on collisions
     
