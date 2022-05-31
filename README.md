@@ -1,6 +1,6 @@
-* This repository is a numerical implementation of 	arXiv:2205.13467 [quant-ph] in python.
+* This repository is a python implementation of	arXiv:2205.13467 [quant-ph].
 
-* Comments are provided in the main code only.
+* Comments are provided in the main code solve_tdse.py.
 
 
 <br/>
