@@ -1,4 +1,4 @@
-* This repository is a python implementation of	arXiv:2205.13467 [quant-ph].
+* This repository is a python implementation of	**arXiv:2205.13467** [quant-ph].
 
 * Comments are provided in the main code solve_tdse.py.
 
@@ -11,9 +11,16 @@
 
 * An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
 
-    Ankit Kumar, P. Arumugam, 	arXiv:2205.13467 [quant-ph]
+    Ankit Kumar, and  P. Arumugam,	**arXiv:2205.13467** [quant-ph]
 
     https://doi.org/10.48550/arXiv.2205.13467
+
+
+* Entanglement Test of Third-Order Coupling in Gravitating Quantum Systems
+
+    Ankit Kumar *et al.*, **arXiv:2206.12897** [quant-ph]
+
+    https://doi.org/10.48550/arXiv.2206.12897
 
 
 * Nonclassical trajectories in head-on collisions
