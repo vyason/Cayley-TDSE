@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/476664668.svg)](https://zenodo.org/badge/latestdoi/476664668)
+
 * This repository is a python implementation of	**arXiv:2205.13467** [quant-ph].
 
 * Comments are provided in the main code solve_tdse.py.
