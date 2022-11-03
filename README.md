@@ -2,8 +2,12 @@
 
 * Comments are provided in the main code solve_tdse.py.
 
+* Please cite using DOI: 10.5281/zenodo.7275668
 
 <br/>
+
+
+
 
 
 ### References:
