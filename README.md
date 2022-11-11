@@ -10,16 +10,17 @@
 
 
 
-
-
-### References:
-
+### Documentation:
 
 * An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
 
     Ankit Kumar, and  P. Arumugam,	**arXiv:2205.13467** [quant-ph]
 
     https://doi.org/10.48550/arXiv.2205.13467
+
+
+
+### References:
 
 
 * Entanglement Test of Third-Order Coupling in Gravitating Quantum Systems
