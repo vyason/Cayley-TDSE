@@ -4,10 +4,6 @@
 
 * Comments are provided in the main code solve_tdse.py.
 
-* Please cite using DOI: 10.5281/zenodo.7275668
-
-<br/>
-
 
 ### Documentation:
 
@@ -16,8 +12,7 @@
     Ankit Kumar, and  P. Arumugam,	**arXiv:2205.13467** [quant-ph]
 
     https://doi.org/10.48550/arXiv.2205.13467
-
-
+    
 
 ### References:
 
