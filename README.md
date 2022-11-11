@@ -9,7 +9,6 @@
 <br/>
 
 
-
 ### Documentation:
 
 * An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
