@@ -9,9 +9,9 @@
 
 * An accurate pentadiagonal matrix solution for the time-dependent Schrödinger equation
 
-    Ankit Kumar, and  P. Arumugam,	**arXiv:2205.13467** [quant-ph]
+    Ankit Kumar, and  P. Arumugam,	[https://doi.org/10.48550/arXiv.2205.13467](**arXiv:2205.13467**)
 
-    https://doi.org/10.48550/arXiv.2205.13467
+  
     
 
 ### References:
