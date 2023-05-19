@@ -2,7 +2,7 @@
 
 * This repository is a python implementation of	[**arXiv:2205.13467**](https://doi.org/10.48550/arXiv.2205.13467)
 
-* Comments are provided in the main code solve_tdse.py.
+* Comments are provided in the main code solve_tdse.py
 
 
 ### Documentation:
