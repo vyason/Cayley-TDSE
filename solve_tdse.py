@@ -1,89 +1,115 @@
 # python code for solving the TDSE using Cayley's operator
-# Copyright (C) 2022  Ankit Kumar
-# Email: akvyas1995@gmail.com
+# Ankit Kumar, kumar.ankit.vyas@gmail.com
 #-----------------------------------------------------------------------
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
-#-----------------------------------------------------------------------
-
 
 import numpy as np
 from math import pi
-from scipy.integrate import simps
-import matplotlib.pyplot
+from scipy.integrate import simpson
+from scipy.sparse import spdiags
+from scipy.sparse.linalg import splu
+import matplotlib.pyplot as plt
 
-from calc_diff import *
-
-# specify the discretisation type as 'tridiag' or 'pentadiag'
+# 1st order derivative (regular and improved central difference)
 #-----------------------------------------------------------------------
-disc_type = 'tridiag'
+def diff(f,h,J,diff_type="regular"):
+
+    if diff_type=="regular":
+        df = (np.roll(f,-1)-np.roll(f,+1))/(2*h)
+        df[0] = df[J-1] = 0
+
+    elif diff_type=="improved":
+        df = (-(np.roll(f,-2)-np.roll(f,+2))+8*(np.roll(f,-1)-np.roll(f,+1)))/(12*h)
+        df[0] = df[1] = df[J-2] = df[J-1] = 0
+
+    return df
+
+
+# 2nd order derivative (regular and improved central difference)
+#-----------------------------------------------------------------------
+def diff2(f,h,J,diff_type="regular"):
+
+    if diff_type=="regular":
+        d2f = (np.roll(f,-1)+np.roll(f,+1)-2*f)/h**2
+        d2f[0] = d2f[J-1] = 0
+
+    elif diff_type=="improved":
+        d2f = (-(np.roll(f,-2)+np.roll(f,+2))+16*(np.roll(f,-1)+np.roll(f,+1))-30*f)/(12*h**2)
+        d2f[0] = d2f[1] = d2f[J-2] = d2f[J-1] = 0
+
+    return d2f
+
+
+#calculate the zeta vector that appears on the RHS
+#---------------------------------------------------------------
+def calc_zeta(J,psi,dx,dt,V,hb,hb2m,sim_type="regular"):
+    return psi - 1j*(dt/hb)*(-hb2m*diff2(psi,dx,J,sim_type)+V*psi)/2
+
+
+# LU matrix on the left: regularonal case
+#-----------------------------------------------------------------------
+def calc_lumatrix(J,dx,dt,V,hb,hb2m,sim_type="regular"):
+    
+    if sim_type=="regular":
+        a = 1 + 1j*dt*(2*hb2m/dx**2 + V)/(2*hb)
+        b = (-1j*hb2m*dt/(2*hb*dx**2))*np.ones((J),float)
+        lumatrix = splu(spdiags(np.array([b,a,b]),np.array([-1,0,+1]),J,J).tocsc())
+
+    elif sim_type=="improved":
+        a = 1 + 1j*dt*(5*hb2m/(2*dx**2) + V)/(2*hb)
+        b = (-2*1j*hb2m*dt/(3*hb*dx**2))*np.ones((J),float)
+        c = (2*1j*hb2m*dt/(48*hb*dx**2))*np.ones((J),float)
+        lumatrix = splu(spdiags(np.array([c,b,a,b,c]),np.array([-2,-1,0,+1,+2]),J,J).tocsc())
+
+    return lumatrix
+
+
+# specify the discretisation type as 'regular' or 'improved'
+#-----------------------------------------------------------------------
+
 
 # defining the system
-#-----------------------------------------------------------------------
+#-----------------------------
+sim_type = "improved"
 hb = 1                                  #Planck's constant, hbar
 m =	1                                   #mass of particle, m
+hb2m = hb**2/(2*m)                                          #value of hbar^2/2m
 
-xmin,xmax = 0,+10                     #x-limits of simulation box
+xmin,xmax = -10,+10                     #x-limits of simulation box
 dx = 0.01                               #grid size, dx 
 x = np.arange(xmin,xmax+dx,dx)          #defining the position grid
 J = len(x)                              #dimension of position grid
 
-# defining the potential V (for example, HO potential)
-#-----------------------------------------------------------------------
-w = 0.1
-V = 1/2*m*w**2*x**2
+# potential and initial wave function
+#------------------------------------------
 V = np.zeros(J,int)
+V[0] = V[-1] = 1e10 
 
-# defining the initial wave packet (for example, Gaussian)
-#-----------------------------------------------------------------------
-psi = np.sqrt(2/L)*np.sin(pi*x/L)
+psi = np.exp(-x**2 + 1j*x )
 
+tmax = 25                              #simulation time limit
+dt   = 0.01                            #time step, dt
+plot_steps = 10                         #time steps b/w two successive plot updates
 
-
-# time limits for the simulation
-#-----------------------------------------------------------------------
-tmax = 100                           #simulation time limit
-dt = 0.01                               #time step, dt
-plot_steps = 10                         #time steps b/w two successive print statements
-
-# setting up the numerical structure
-#-----------------------------------------------------------------------
-hb2m = hb**2/(2*m)                                          #value of hbar^2/2m
-if disc_type == 'tridiag':
-    from discretise import lhs_lumatrix_tridiag,zeta_tridiag
-    lhs_lumatrix = locals()['lhs_lumatrix_tridiag']
-    zeta = locals()['zeta_tridiag']
-elif disc_type == 'pentadiag':
-    from discretise import lhs_lumatrix_pentadiag,zeta_pentadiag
-    lhs_lumatrix = locals()['lhs_lumatrix_pentadiag']
-    zeta = locals()['zeta_pentadiag']
-else:
-    raise Exception('Specify disc_type type as tridiag/pentadiag')
-lhs_lu = lhs_lumatrix(J,dx,dt,V,hb,hb2m)	#LU decomposition for the LHS matrix
 
 # solving the TDSE
 #-----------------------------------------------------------------------
 t = 0
+lumatrix = calc_lumatrix(J,dx,dt,V,hb,hb2m,sim_type)
 while t < tmax:
-    ex = simps(x*np.abs(psi)**2,dx=dx)                      #<x>
-    dpsi = diff_5pt(psi,dx,J)                               #d(psi)/dx
-    ep = (-1j*hb*simps(np.conj(psi)*dpsi,dx=dx)).real       #<p>
+    dpsi = diff(psi,dx,J,"improved")
 
-    for j in range(plot_steps):                             #evolve plot_steps times
-        psi = lhs_lu.solve(zeta(J,psi,dx,dt,V,hb,hb2m))   
+    exp_x = simpson(x*np.abs(psi)**2,dx=dx)
+    exp_p = (-1j*hb*simpson(np.conj(psi)*dpsi,dx=dx)).real 
+    norm  = simpson(np.abs(psi)**2,dx=dx)        
+
+    print(f"{t:f} \t {norm:f}")
+
+    for _ in range(plot_steps):
+        psi = lumatrix.solve(calc_zeta(J,psi,dx,dt,V,hb,hb2m,sim_type))   
     t = t + plot_steps*dt
 
-    plt.
+    plt.cla()
+    plt.plot(x,np.abs(psi)**2)      # plot x vs |psi|^2
+    plt.grid()
+    plt.title(f"t = {t:f}")
+    plt.pause(0.1)
